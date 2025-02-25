@@ -2,10 +2,16 @@ const PIXEL_HIG = 3;
 const PIXEL_WID = 3;
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
-const debugMode = document.getElementById("debugMode");
+const debugModeSelector = document.getElementById("debugMode");
 const stepButton = document.getElementById("stepButton");
 const clearButton = document.getElementById("clearButton");
-let points = [], currentStep = 0, pixels = [], debug = false;
+const drawModeSelector = document.getElementById("drawMode")
+
+let points = [];
+let currentStep = 0;
+let pixels = [];
+let debug = false;
+let drawMode = "diff";
 
 canvas.addEventListener("click", (event) => {
     const rect = canvas.getBoundingClientRect();
@@ -19,11 +25,15 @@ canvas.addEventListener("click", (event) => {
     }
 
     if (points.length === 2) {
-        pixels = differentialAnalyzer(points[0], points[1]);
+        if (drawMode === "diff") {
+            pixels = differentialAnalyzer(points[0], points[1]);
+        } else if (drawMode === "brezenhem") {
+            pixels = brezenhem(points[0], points[1]);
+        } else if (drawMode === "antialiasing") {
+            pixels = antiAliasing(points[0], points[1]);
+        }
         currentStep = 0;
-        if (debug) {
-            stepButton.disabled = false;
-        } else {
+        if (!debug) {
             drawLine();
             points = [];
         }
@@ -44,12 +54,11 @@ function drawStep() {
         ctx.fillRect(p.x, p.y, PIXEL_WID, PIXEL_HIG);
         currentStep++;
     } else {
-        stepButton.disabled = true;
         points = [];
     }
 }
 
-debugMode.addEventListener("change", (event) => {
+debugModeSelector.addEventListener("change", (event) => {
     debug = event.target.value === "on";
     stepButton.hidden = !debug;
 });
@@ -61,5 +70,8 @@ clearButton.addEventListener("click", () => {
     points = [];
     pixels = [];
     currentStep = 0;
-    stepButton.disabled = true;
+});
+
+drawModeSelector.addEventListener("change", (event) => {
+    drawMode = event.target.value;
 });
