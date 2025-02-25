@@ -3,21 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>giis-lab1</title>
+    <title>Second-Order Curves</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/styles.css" rel="stylesheet">
 </head>
 <body>
 
 <div class="container">
-    <h2>Графический интерфейс для построения отрезков</h2>
+    <h2>Построение линий второго порядка</h2>
 
     <div class="form-group">
-        <label for="drawMode" class="form-label">Метод построения отрезка</label>
-        <select id="drawMode" class="form-select">
-            <option value="diff" selected>Дифференциальный анализатор</option>
-            <option value="brezenhem">Алгоритм Брезенхема</option>
-            <option value="antialiasing">Метод устранения ступенчатости</option>
+        <label for="curveType" class="form-label">Выберите тип кривой</label>
+        <select id="curveType" class="form-select">
+            <option value="ellipse" selected>Эллипс</option>
+            <option value="parabola">Парабола</option>
+            <option value="hyperbola">Гипербола</option>
         </select>
     </div>
 
@@ -32,12 +32,13 @@
     <canvas id="canvas" width="500" height="500"></canvas>
 
     <div class="btn-group">
-        <button class="btn btn-primary" id="stepButton" hidden>Следующий пиксель</button>
+        <button class="btn btn-primary" id="stepButton" hidden>Следующий шаг</button>
         <button class="btn btn-danger" id="clearButton">Очистить экран</button>
     </div>
 </div>
 
 <script src="/js/common.js"></script>
-<script src="/js/lab1.js"></script>
+<script src="/js/lab2.js"></script>
+
 </body>
 </html>
