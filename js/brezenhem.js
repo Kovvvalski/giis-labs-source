@@ -10,7 +10,7 @@ function brezenhem(start, end) {
     let pixelArray = [];
 
     while (true) {
-        pixelArray.push({x: x1, y: y1});
+        pixelArray.push({x: x1, y: y1, color: DEFAULT_COLOR});
 
         if (x1 === x2 && y1 === y2) break;
 

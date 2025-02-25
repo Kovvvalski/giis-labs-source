@@ -9,7 +9,7 @@ function differentialAnalyzer(start, end) {
     let pixelArray = [];
 
     for (let i = 0; i <= length; i++) {
-        pixelArray.push({x: Math.round(x), y: Math.round(y)});
+        pixelArray.push({x: Math.round(x), y: Math.round(y), color: DEFAULT_COLOR});
         x += xInc;
         y += yInc;
     }

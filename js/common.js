@@ -1,5 +1,5 @@
-const PIXEL_HIG = 3;
-const PIXEL_WID = 3;
+const PIXEL_SIZE = 1;
+const DEFAULT_COLOR = "rgba(0, 0, 0, 1)"
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
 const debugModeSelector = document.getElementById("debugMode");
@@ -21,7 +21,7 @@ canvas.addEventListener("click", (event) => {
     if (points.length < 2) {
         points.push({x, y});
         ctx.fillStyle = "red";
-        ctx.fillRect(x, y, PIXEL_WID, PIXEL_HIG);
+        ctx.fillRect(x, y, PIXEL_SIZE, PIXEL_SIZE);
     }
 
     if (points.length === 2) {
@@ -42,16 +42,16 @@ canvas.addEventListener("click", (event) => {
 
 function drawLine() {
     pixels.forEach(p => {
-        ctx.fillStyle = "blue";
-        ctx.fillRect(p.x, p.y, PIXEL_WID, PIXEL_HIG);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x, p.y, PIXEL_SIZE, PIXEL_SIZE);
     });
 }
 
 function drawStep() {
     if (currentStep < pixels.length) {
-        ctx.fillStyle = "blue";
         let p = pixels[currentStep];
-        ctx.fillRect(p.x, p.y, PIXEL_WID, PIXEL_HIG);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x, p.y, PIXEL_SIZE, PIXEL_SIZE);
         currentStep++;
     } else {
         points = [];
