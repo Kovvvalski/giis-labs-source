@@ -137,13 +137,14 @@ function ellipseCurve(x0, y0, a, b) {
 function parabolaCurve(x0, y0, p, maxY) {
     let points = [];
     let x = 0, y = 0;
-    let Sd = (1 / Math.abs(p)) * (x + 1) ** 2 - (y + 1);
-    let Sv = (1 / Math.abs(p)) * x ** 2 - (y + 1);
-    let Sh = (1 / Math.abs(p)) * (x + 1) ** 2 - y;
 
-    points.push({x: x0 + x, y: y0 + y, color: DEFAULT_COLOR});
+    let Sd = (1 / p) * (x + 1) ** 2 - (y + 1);
+    let Sv = (1 / p) * x ** 2 - (y + 1);
+    let Sh = (1 / p) * (x + 1) ** 2 - y;
 
-    while (y < maxY) {
+    points.push({ x: x0 + x, y: y0 + y, color: DEFAULT_COLOR });
+
+    while (Math.abs(y) < maxY) {
         if (Math.abs(Sh) <= Math.abs(Sv)) {
             if (Math.abs(Sd) < Math.abs(Sh)) y++;
             x++;
@@ -151,15 +152,17 @@ function parabolaCurve(x0, y0, p, maxY) {
             if (Math.abs(Sd) < Math.abs(Sv)) x++;
             y++;
         }
-        points.push({x: x0 + x, y: y0 - y, color: DEFAULT_COLOR});
-        points.push({x: x0 - x, y: y0 - y, color: DEFAULT_COLOR});
 
-        Sd = (1 / Math.abs(p)) * (x + 1) ** 2 - (y + 1);
-        Sv = (1 / Math.abs(p)) * x ** 2 - (y + 1);
-        Sh = (1 / Math.abs(p)) * (x + 1) ** 2 - y;
+        points.push({ x: x0 + x, y: y0 + y, color: DEFAULT_COLOR });
+        points.push({ x: x0 - x, y: y0 + y, color: DEFAULT_COLOR });
+
+        Sd = (1 / p) * (x + 1) ** 2 - (y + 1);
+        Sv = (1 / p) * x ** 2 - (y + 1);
+        Sh = (1 / p) * (x + 1) ** 2 - y;
     }
     return points;
 }
+
 
 function hyperbolaCurve(x0, y0, a, b, maxX) {
     let points = [];
