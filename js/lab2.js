@@ -151,9 +151,13 @@ function parabolaCurve(x0, y0, p, maxY) {
             if (Math.abs(Sd) < Math.abs(Sv)) x++;
             y++;
         }
-        points.push({x: x0 + x, y: y0 - y, color: DEFAULT_COLOR});
-        points.push({x: x0 - x, y: y0 - y, color: DEFAULT_COLOR});
-
+        if (p > 0) {
+            points.push({x: x0 + x, y: y0 - y, color: DEFAULT_COLOR});
+            points.push({x: x0 - x, y: y0 - y, color: DEFAULT_COLOR});
+        } else if (p < 0) {
+            points.push({x: x0 + x, y: y0 + y, color: DEFAULT_COLOR});
+            points.push({x: x0 - x, y: y0 + y, color: DEFAULT_COLOR});
+        }
         Sd = (1 / Math.abs(p)) * (x + 1) ** 2 - (y + 1);
         Sv = (1 / Math.abs(p)) * x ** 2 - (y + 1);
         Sh = (1 / Math.abs(p)) * (x + 1) ** 2 - y;
