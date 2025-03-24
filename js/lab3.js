@@ -28,10 +28,9 @@ document.addEventListener("DOMContentLoaded", () => {
         draw();
     });
 
+
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        // Draw control points
         ctx.fillStyle = "red";
         points.forEach(p => {
             ctx.beginPath();
@@ -43,16 +42,17 @@ document.addEventListener("DOMContentLoaded", () => {
             ctx.strokeStyle = "blue";
             ctx.lineWidth = 2;
             ctx.beginPath();
-            let curvePoints;
+            let curvePoints = [];
+
             if (curveType.value === "hermite") {
                 curvePoints = hermiteCurve(points);
             } else if (curveType.value === "bezier") {
                 curvePoints = bezierCurve(points);
-            } else if (curveType.value === "bspline" && points.length > 3) {
+            } else if (curveType.value === "bspline") {
                 curvePoints = bsplineCurve(points);
             }
 
-            if (curvePoints) {
+            if (curvePoints.length > 0) {
                 ctx.moveTo(curvePoints[0].x, curvePoints[0].y);
                 curvePoints.forEach(p => ctx.lineTo(p.x, p.y));
                 ctx.stroke();
@@ -129,57 +129,63 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function hermiteCurve(points) {
-        points = points.map(p => [p.x, p.y]);
+        let allCurvePoints = [];
+        for (let i = 0; i < points.length - 3; i += 4) {
+            let p = points.slice(i, i + 4).map(p => [p.x, p.y]);
 
-        let pointsVector = [];
-        for (let i = 0; i < points.length; i++) {
-            let row = [];
-            for (let j = 0; j < points[0].length; j++) {
-                row.push(points[i][j]);
+            let pointsVector = [];
+            for (let j = 0; j < p.length; j++) {
+                pointsVector.push([...p[j]]);
             }
-            pointsVector.push(row);
+
+            pointsVector[0] = p[0];
+            pointsVector[1] = p[3];
+            pointsVector[2] = p[1];
+            pointsVector[3] = p[2];
+
+            let m = [
+                [2, -2, 1, 1],
+                [-3, 3, -2, -1],
+                [0, 0, 1, 0],
+                [1, 0, 0, 0]
+            ];
+
+            pointsVector[2][0] -= pointsVector[0][0];
+            pointsVector[3][0] -= pointsVector[1][0];
+            pointsVector[2][0] *= 4;
+            pointsVector[3][0] *= 4;
+
+            pointsVector[2][1] -= pointsVector[0][1];
+            pointsVector[3][1] -= pointsVector[1][1];
+            pointsVector[2][1] *= 4;
+            pointsVector[3][1] *= 4;
+
+            let c = multiplyMatrices(m, pointsVector);
+            allCurvePoints.push(...calculatePointsBetween(c));
         }
-        pointsVector[0] = points[0];
-        pointsVector[1] = points[3];
-        pointsVector[2] = points[1];
-        pointsVector[3] = points[2];
-        let m = [
-            [2, -2, 1, 1],
-            [-3, 3, -2, -1],
-            [0, 0, 1, 0],
-            [1, 0, 0, 0]
-        ];
-        pointsVector[2][0] -= pointsVector[0][0];
-        pointsVector[3][0] -= pointsVector[1][0];
-        pointsVector[2][0] *= 4;
-        pointsVector[3][0] *= 4;
-
-        pointsVector[2][1] -= pointsVector[0][1];
-        pointsVector[3][1] -= pointsVector[1][1];
-        pointsVector[2][1] *= 4;
-        pointsVector[3][1] *= 4;
-
-        let c = multiplyMatrices(m, pointsVector);
-        return calculatePointsBetween(c);
+        return allCurvePoints;
     }
 
     function bezierCurve(points) {
-        if (points.length < 4) return [];
-        let Gb = points.slice(0, 4).map(p => [p.x, p.y]);
+        let allCurvePoints = [];
+        for (let i = 0; i < points.length - 3; i += 4) {
+            let Gb = points.slice(i, i + 4).map(p => [p.x, p.y]);
 
-        let Mb = [
-            [-1, 3, -3, 1],
-            [3, -6, 3, 0],
-            [-3, 3, 0, 0],
-            [1, 0, 0, 0]
-        ];
+            let Mb = [
+                [-1, 3, -3, 1],
+                [3, -6, 3, 0],
+                [-3, 3, 0, 0],
+                [1, 0, 0, 0]
+            ];
 
-        let C = multiplyMatrices(Mb, Gb);
-        return calculatePointsBetween(C);
+            let C = multiplyMatrices(Mb, Gb);
+            allCurvePoints.push(...calculatePointsBetween(C));
+        }
+        return allCurvePoints;
     }
 
     function bsplineCurve(points) {
-        if (points.length < 4) return [];
+        let allCurvePoints = [];
         let Ms = [
             [-1, 3, -3, 1],
             [3, -6, 3, 0],
@@ -187,15 +193,13 @@ document.addEventListener("DOMContentLoaded", () => {
             [1, 4, 1, 0]
         ].map(row => row.map(v => v / 6));
 
-        let curvePoints = [];
-
         for (let i = 0; i < points.length - 3; i++) {
             let Cs = [points[i], points[i + 1], points[i + 2], points[i + 3]].map(p => [p.x, p.y]);
             let C = multiplyMatrices(Ms, Cs);
-            curvePoints.push(...calculatePointsBetween(C));
+            allCurvePoints.push(...calculatePointsBetween(C));
         }
 
-        return curvePoints;
+        return allCurvePoints;
     }
 
     clearButton.addEventListener("click", () => {
