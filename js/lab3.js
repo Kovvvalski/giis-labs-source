@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let selectedPoint = null;
 
     canvas.addEventListener("mousedown", (event) => {
-        const { offsetX, offsetY } = event;
+        const {offsetX, offsetY} = event;
         selectedPoint = points.find(p => Math.hypot(p.x - offsetX, p.y - offsetY) < 10);
     });
 
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     canvas.addEventListener("click", (event) => {
-        points.push({ x: event.offsetX, y: event.offsetY });
+        points.push({x: event.offsetX, y: event.offsetY});
         draw();
     });
 
@@ -61,7 +61,22 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function transpose(matrix) {
-        return matrix[0].map((_, colIndex) => matrix.map(row => row[colIndex]));
+        let rows = matrix.length;
+        let cols = matrix[0].length;
+        let transposed = [];
+        for (let i = 0; i < cols; i++) {
+            let row = [];
+            for (let j = 0; j < rows; j++) {
+                row.push(0);
+            }
+            transposed.push(row);
+        }
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                transposed[j][i] = matrix[i][j];
+            }
+        }
+        return transposed;
     }
 
     function multiplyMatrices(m1, m2) {
@@ -78,11 +93,17 @@ document.addEventListener("DOMContentLoaded", () => {
         let err = dx - dy;
 
         while (true) {
-            points.push({ x: x0, y: y0 });
+            points.push({x: x0, y: y0});
             if (x0 === x1 && y0 === y1) break;
             let e2 = 2 * err;
-            if (e2 > -dy) { err -= dy; x0 += sx; }
-            if (e2 < dx) { err += dx; y0 += sy; }
+            if (e2 > -dy) {
+                err -= dy;
+                x0 += sx;
+            }
+            if (e2 < dx) {
+                err += dx;
+                y0 += sy;
+            }
         }
 
         return points;
@@ -108,24 +129,43 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function hermiteCurve(points) {
-        if (points.length < 4) return [];
-        let Gn = points.slice(0, 4).map(p => [p.x, p.y]);
+        points = points.map(p => [p.x, p.y]);
 
-        let Mn = [
+        let pointsVector = [];
+        for (let i = 0; i < points.length; i++) {
+            let row = [];
+            for (let j = 0; j < points[0].length; j++) {
+                row.push(points[i][j]);
+            }
+            pointsVector.push(row);
+        }
+
+        pointsVector[0] = points[1];
+        pointsVector[1] = points[3];
+        pointsVector[2] = points[0];
+        pointsVector[3] = points[2];
+
+
+
+        let m = [
             [2, -2, 1, 1],
             [-3, 3, -2, -1],
             [0, 0, 1, 0],
             [1, 0, 0, 0]
         ];
 
-        let tangent1 = { x: (Gn[1][0] - Gn[0][0]) * 2, y: (Gn[1][1] - Gn[0][1]) * 2 };
-        let tangent2 = { x: (Gn[3][0] - Gn[2][0]) * 2, y: (Gn[3][1] - Gn[2][1]) * 2 };
+        pointsVector[2][0] -= pointsVector[0][0];
+        pointsVector[3][0] -= pointsVector[1][0];
+        pointsVector[2][0] *= 4;
+        pointsVector[3][0] *= 4;
 
-        Gn[2] = [tangent1.x, tangent1.y];
-        Gn[3] = [tangent2.x, tangent2.y];
+        pointsVector[2][1] -= pointsVector[0][1];
+        pointsVector[3][1] -= pointsVector[1][1];
+        pointsVector[2][1] *= 4;
+        pointsVector[3][1] *= 4;
 
-        let C = multiplyMatrices(Mn, Gn);
-        return calculatePointsBetween(C);
+        let c = multiplyMatrices(m, pointsVector);
+        return calculatePointsBetween(c);
     }
 
     function bezierCurve(points) {
