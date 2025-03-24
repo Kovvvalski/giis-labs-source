@@ -139,9 +139,9 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             pointsVector.push(row);
         }
-        pointsVector[0] = points[1];
+        pointsVector[0] = points[0];
         pointsVector[1] = points[3];
-        pointsVector[2] = points[0];
+        pointsVector[2] = points[1];
         pointsVector[3] = points[2];
         let m = [
             [2, -2, 1, 1],
