@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
         selectedPoint = null;
     });
 
-    canvas.addEventListener("click", (event) => {
+    canvas.addEventListener("dblclick", (event) => {
         points.push({x: event.offsetX, y: event.offsetY});
         draw();
     });
@@ -139,21 +139,16 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             pointsVector.push(row);
         }
-
         pointsVector[0] = points[1];
         pointsVector[1] = points[3];
         pointsVector[2] = points[0];
         pointsVector[3] = points[2];
-
-
-
         let m = [
             [2, -2, 1, 1],
             [-3, 3, -2, -1],
             [0, 0, 1, 0],
             [1, 0, 0, 0]
         ];
-
         pointsVector[2][0] -= pointsVector[0][0];
         pointsVector[3][0] -= pointsVector[1][0];
         pointsVector[2][0] *= 4;
