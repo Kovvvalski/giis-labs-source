@@ -83,6 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
         draw();
     });
 
+
     function draw() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = "red";
