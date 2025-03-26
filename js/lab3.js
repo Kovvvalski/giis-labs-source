@@ -4,10 +4,35 @@ document.addEventListener("DOMContentLoaded", () => {
     const curveType = document.getElementById("curveType");
     const clearButton = document.getElementById("clearButton");
     let points = [];
+    let curves = [];
     let selectedPoint = null;
 
+    class Curve {
+        constructor(p1, p2, p3, p4) {
+            this.points = [p1, p2, p3, p4];
+        }
+    }
+
+    class BSpline {
+        constructor() {
+            this.points = [];
+        }
+
+        addPoint(point) {
+            let existingPoint = points.find(p => Math.hypot(p.x - point.x, p.y - point.y) < 10);
+            if (!existingPoint) {
+                points.push(point);
+                this.points.push(point);
+            } else {
+                this.points.push(existingPoint);
+            }
+        }
+    }
+
+    const bspline = new BSpline();
+
     canvas.addEventListener("mousedown", (event) => {
-        const {offsetX, offsetY} = event;
+        const { offsetX, offsetY } = event;
         selectedPoint = points.find(p => Math.hypot(p.x - offsetX, p.y - offsetY) < 10);
     });
 
@@ -20,11 +45,41 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     canvas.addEventListener("mouseup", () => {
+        if (selectedPoint) {
+            let existingPoint = points.find(p => p !== selectedPoint && Math.hypot(p.x - selectedPoint.x, p.y - selectedPoint.y) < 10);
+            if (existingPoint) {
+                curves.forEach(curve => {
+                    curve.points = curve.points.map(p => (p === selectedPoint ? existingPoint : p));
+                });
+                bspline.points = bspline.points.map(p => (p === selectedPoint ? existingPoint : p));
+                points = points.filter(p => p !== selectedPoint);
+            }
+        }
         selectedPoint = null;
     });
 
     canvas.addEventListener("dblclick", (event) => {
-        points.push({x: event.offsetX, y: event.offsetY});
+        let newPoint = { x: event.offsetX, y: event.offsetY };
+        let existingPoint = points.find(p => Math.hypot(p.x - newPoint.x, p.y - newPoint.y) < 10);
+
+        if (existingPoint) {
+            points = points.map(p => (p === existingPoint ? existingPoint : p));
+            bspline.points = bspline.points.map(p => (p === existingPoint ? existingPoint : p));
+        } else {
+            points.push(newPoint);
+            existingPoint = newPoint;
+        }
+
+        if (curveType.value === "bspline") {
+            bspline.addPoint(existingPoint);
+            if (bspline.points.length >= 4) {
+                curves.push(new Curve(...bspline.points.slice(-4)));
+            }
+        } else {
+            if (points.length % 4 === 0) {
+                curves.push(new Curve(...points.slice(-4)));
+            }
+        }
         draw();
     });
 
@@ -38,18 +93,26 @@ document.addEventListener("DOMContentLoaded", () => {
             ctx.fill();
         });
 
-        if (points.length >= 4) {
-            ctx.strokeStyle = "blue";
-            ctx.lineWidth = 2;
+        ctx.strokeStyle = "blue";
+        ctx.lineWidth = 2;
+
+        curves.forEach(curve => {
             ctx.beginPath();
             let curvePoints = [];
 
             if (curveType.value === "hermite") {
-                curvePoints = hermiteCurve(points);
+                curvePoints = hermiteCurve(curve.points);
+                drawVectors(curve.points[0], curve.points[2]);
+                drawVectors(curve.points[1], curve.points[3]);
             } else if (curveType.value === "bezier") {
-                curvePoints = bezierCurve(points);
+                curvePoints = bezierCurve(curve.points);
+                drawVectors(curve.points[0], curve.points[1]);
+                drawVectors(curve.points[2], curve.points[3]);
             } else if (curveType.value === "bspline") {
-                curvePoints = bsplineCurve(points);
+                curvePoints = bsplineCurve(curve.points);
+                for (let i = 0; i < curve.points.length - 1; i++) {
+                    drawVectors(curve.points[i], curve.points[i + 1]);
+                }
             }
 
             if (curvePoints.length > 0) {
@@ -57,8 +120,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 curvePoints.forEach(p => ctx.lineTo(p.x, p.y));
                 ctx.stroke();
             }
-        }
+        });
     }
+
+    function drawVectors(p1, p2) {
+        ctx.strokeStyle = "green";
+        ctx.beginPath();
+        ctx.moveTo(p1.x, p1.y);
+        ctx.lineTo(p2.x, p2.y);
+        ctx.stroke();
+        ctx.strokeStyle = "blue";
+    }
+
 
     function transpose(matrix) {
         let rows = matrix.length;
@@ -204,6 +277,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     clearButton.addEventListener("click", () => {
         points = [];
+        curves =[];
+        bspline.points = [];
         draw();
     });
 });
