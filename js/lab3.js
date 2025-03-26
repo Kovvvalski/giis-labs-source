@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const bspline = new BSpline();
 
     canvas.addEventListener("mousedown", (event) => {
-        const { offsetX, offsetY } = event;
+        const {offsetX, offsetY} = event;
         selectedPoint = points.find(p => Math.hypot(p.x - offsetX, p.y - offsetY) < 10);
     });
 
@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     canvas.addEventListener("dblclick", (event) => {
-        let newPoint = { x: event.offsetX, y: event.offsetY };
+        let newPoint = {x: event.offsetX, y: event.offsetY};
         let existingPoint = points.find(p => Math.hypot(p.x - newPoint.x, p.y - newPoint.y) < 10);
 
         if (existingPoint) {
@@ -102,8 +102,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (curveType.value === "hermite") {
                 curvePoints = hermiteCurve(curve.points);
-                drawVectors(curve.points[0], curve.points[2]);
-                drawVectors(curve.points[1], curve.points[3]);
+                drawVectors({x: 0, y: 0}, {x: curve.points[2].x, y: curve.points[2].y});
+                drawVectors({x: 0, y: 0}, {x: curve.points[3].x, y: curve.points[3].y});
             } else if (curveType.value === "bezier") {
                 curvePoints = bezierCurve(curve.points);
                 drawVectors(curve.points[0], curve.points[1]);
@@ -203,41 +203,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function hermiteCurve(points) {
         let allCurvePoints = [];
-        for (let i = 0; i < points.length - 3; i += 4) {
-            let p = points.slice(i, i + 4).map(p => [p.x, p.y]);
 
-            let pointsVector = [];
-            for (let j = 0; j < p.length; j++) {
-                pointsVector.push([...p[j]]);
-            }
+        let [p1, p4, r1, r4] = points;
 
-            pointsVector[0] = p[0];
-            pointsVector[1] = p[3];
-            pointsVector[2] = p[1];
-            pointsVector[3] = p[2];
+        let m = [
+            [2, -2, 1, 1],
+            [-3, 3, -2, -1],
+            [0, 0, 1, 0],
+            [1, 0, 0, 0]
+        ];
 
-            let m = [
-                [2, -2, 1, 1],
-                [-3, 3, -2, -1],
-                [0, 0, 1, 0],
-                [1, 0, 0, 0]
-            ];
+        let pointsVector = [
+            [p1.x, p1.y],
+            [p4.x, p4.y],
+            [r1.x, r1.y],
+            [r4.x, r4.y]
+        ];
 
-            pointsVector[2][0] -= pointsVector[0][0];
-            pointsVector[3][0] -= pointsVector[1][0];
-            pointsVector[2][0] *= 4;
-            pointsVector[3][0] *= 4;
-
-            pointsVector[2][1] -= pointsVector[0][1];
-            pointsVector[3][1] -= pointsVector[1][1];
-            pointsVector[2][1] *= 4;
-            pointsVector[3][1] *= 4;
-
-            let c = multiplyMatrices(m, pointsVector);
-            allCurvePoints.push(...calculatePointsBetween(c));
-        }
+        let c = multiplyMatrices(m, pointsVector);
+        allCurvePoints.push(...calculatePointsBetween(c));
         return allCurvePoints;
     }
+
 
     function bezierCurve(points) {
         let allCurvePoints = [];
@@ -277,7 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     clearButton.addEventListener("click", () => {
         points = [];
-        curves =[];
+        curves = [];
         bspline.points = [];
         draw();
     });
