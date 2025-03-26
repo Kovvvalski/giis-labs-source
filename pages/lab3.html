@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Построение кривых</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        canvas {
+            border: 1px solid black;
+            cursor: crosshair;
+        }
+    </style>
+</head>
+<body>
+<div class="container mt-4">
+    <h2>Построение кривых</h2>
+    <div class="form-group">
+        <label for="curveType">Выберите тип кривой:</label>
+        <select id="curveType" class="form-control">
+            <option value="hermite">Кривая Эрмита</option>
+            <option value="bezier">Кривая Безье</option>
+            <option value="bspline">B-сплайн</option>
+        </select>
+    </div>
+    <canvas id="canvas" width="600" height="400"></canvas>
+    <div class="mt-3">
+        <button class="btn btn-danger" id="clearButton">Очистить экран</button>
+    </div>
+</div>
+<script src="/js/lab3.js"></script>
+</body>
+</html>
