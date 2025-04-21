@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Лаб 5: Работа с полигонами</title>
+    <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body>
+<h1>Лаб 5: Работа с полигонами</h1>
+<div id="editor5" class="editor-container">
+    <h2>Работа с полигонами</h2>
+    <canvas id="canvas5"></canvas>
+    <div id="toolbar5">
+        <div>
+            <h3>Алгоритмы:</h3>
+            <button onclick="Editor5.setAlgorithm('cda')">ЦДА</button>
+            <button onclick="Editor5.setAlgorithm('bresenham')">Брезенхем</button>
+            <button onclick="Editor5.setAlgorithm('wu')">Ву</button>
+        </div>
+        <div>
+            <h3>Режимы:</h3>
+            <label for="mode"></label><select id="mode" onchange="Editor5.setMode(this.value)">
+                <option value="line">Линия</option>
+                <option value="polygon">Полигон</option>
+                <option value="point">Точка</option>
+            </select>
+            <button onclick="Editor5.clearCanvas()">Очистить</button>
+            <button onclick="Editor5.toggleDebugMode()">Отладка (D)</button>
+        </div>
+        <div>
+            <h3>Полигоны:</h3>
+            <button onclick="Editor5.finishPolygon()">Замкнуть (C)</button>
+            <button onclick="Editor5.checkConvexity()">Выпуклость</button>
+            <button onclick="Editor5.calculateNormals()">Нормали</button>
+        </div>
+        <div>
+            <h3>Оболочка:</h3>
+            <label for="hullAlgorithm"></label><select id="hullAlgorithm">
+                <option value="graham">Грэхем</option>
+                <option value="jarvis">Джарвис</option>
+            </select>
+            <button onclick="Editor5.buildConvexHull()">Построить</button>
+        </div>
+    </div>
+    <div class="info" id="infoPanel">Готов к работе</div>
+</div>
+<script src="/js/lab5.js"></script>
+</body>
+</html>

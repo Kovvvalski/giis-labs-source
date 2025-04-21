@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Лаб 6: Алгоритмы заполнения</title>
+  <link href="/css/styles.css" rel="stylesheet">
+</head>
+<body>
+<h1>Лаб 6: Алгоритмы заполнения</h1>
+<div id="editor6" class="editor-container">
+  <h2>Алгоритмы заполнения</h2>
+  <canvas id="canvas6"></canvas>
+  <div class="toolbar6">
+    <div class="toolbar-section">
+      <h3>Рисование:</h3>
+      <button id="drawPolygon">Полигон</button>
+      <button id="drawFreehand">От руки</button>
+      <button id="clearCanvas">Очистить</button>
+    </div>
+    <div class="toolbar-section">
+      <h3>Заливка:</h3>
+      <label for="fillAlgorithm"></label><select id="fillAlgorithm">
+        <option value="scanline">Развертка (AET)</option>
+        <option value="scanlineAEL">Развертка (AEL)</option>
+        <option value="floodFill">Затравка</option>
+        <option value="floodFillLine">Построчная затравка</option>
+      </select>
+      <button id="fillButton">Заполнить</button>
+    </div>
+    <div class="toolbar-section">
+      <h3>Настройки:</h3>
+      <label for="fillColorPicker"></label><input type="color" id="fillColorPicker" value="#ff0000">
+      <label><input type="checkbox" id="debugCheckbox"> Отладка</label>
+      <label for="delayInput"></label><input type="range" id="delayInput" min="1" max="100" value="50">
+    </div>
+  </div>
+  <div class="debug-panel">
+    <h3>Отладка:</h3>
+    <div id="debugInfo"></div>
+  </div>
+</div>
+<script src="/js/lab6.js"></script>
+</body>
+</html>

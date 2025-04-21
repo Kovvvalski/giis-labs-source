@@ -35,3 +35,219 @@ canvas {
 .btn-group button {
     margin: 5px;
 }
+
+#editor5 #canvas5 {
+    border: 1px solid black;
+    cursor: crosshair;
+    background-color: white;
+}
+
+#editor5 #toolbar5 {
+    margin-bottom: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    padding: 10px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+#editor5 button, #editor5 select {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+#editor5 .panel {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #f8f8f8;
+    border-radius: 5px;
+}
+
+#editor5 .info {
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #e8f4f8;
+    border-radius: 5px;
+}
+
+/* Лаб 6: Алгоритмы заполнения */
+#editor6 #canvas6 {
+    border: 1px solid #ddd;
+    margin-bottom: 20px;
+    background-color: white;
+    cursor: crosshair;
+}
+
+#editor6 .toolbar6 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+#editor6 button.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#editor6 .debug-panel {
+    width: 100%;
+    margin-top: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* Специфичные стили для редактора 7 */
+#editor7 #canvas7 {
+    cursor: crosshair;
+    border: 1px solid #4a6ea9;
+}
+
+#editor7 .toolbar7 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+#editor7 button {
+    padding: 8px 15px;
+    background-color: #4a6ea9;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+#editor7 button:hover {
+    background-color: #3a5a8f;
+}
+
+#editor7 button.active {
+    background-color: #2c4a7a;
+}
+
+#editor7 .debug-panel {
+    width: 100%;
+    margin-top: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+#editor7 .debug-panel h3 {
+    margin-top: 0;
+    color: #4a6ea9;
+}
+
+#editor7 .info-message {
+    margin: 5px 0;
+    padding: 5px;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+}
+
+/* Стили для редактора 8_1 (2D отсечение) */
+#editor8_1 #canvas2d {
+    cursor: crosshair;
+    border: 1px solid #4a6ea9;
+}
+
+#editor8_1 .toolbar8 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+#editor8_1 button {
+    padding: 8px 15px;
+    background-color: #4a6ea9;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+#editor8_1 button:hover {
+    background-color: #3a5a8f;
+}
+
+#editor8_1 button.active {
+    background-color: #2c4a7a;
+}
+
+#editor8_1 .info {
+    width: 100%;
+    margin-top: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+/* Стили для редактора 8_2 (3D отсечение) */
+#editor8_2 #canvas3d {
+    cursor: crosshair;
+    border: 1px solid #4a6ea9;
+}
+
+#editor8_2 .toolbar8 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-bottom: 15px;
+    padding: 15px;
+    background-color: #f0f0f0;
+    border-radius: 5px;
+}
+
+#editor8_2 button {
+    padding: 8px 15px;
+    background-color: #4a6ea9;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+#editor8_2 button:hover {
+    background-color: #3a5a8f;
+}
+
+#editor8_2 button.active {
+    background-color: #2c4a7a;
+}
+
+#editor8_2 .info {
+    width: 100%;
+    margin-top: 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    max-height: 200px;
+    overflow-y: auto;
+}
